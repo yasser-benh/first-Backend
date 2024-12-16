@@ -43,7 +43,7 @@ async function handleDeleteProject(req: Request, res: Response) {
 
 export {
   handleUpdateProject,
-  handleGetProjectById as handleGetProjectsById,
+  handleGetProjectById,
   handleCreateProject,
   handleDeleteProject,
   handleGetProjects,

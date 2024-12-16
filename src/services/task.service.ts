@@ -1,13 +1,8 @@
 import {
-  createTaskFromDb,
-  deleteTaskFromDb,
-  getTaskByIdFromDb,
-  getTasksFromDb,
   NewTask,
   SortTasksBy,
-  Task,
+  TaskModel,
   UpdateTask,
-  updateTaskFromDb,
 } from "../model/task.model";
 
 export async function getTasks({
@@ -21,22 +16,30 @@ export async function getTasks({
   sort?: "asc" | "desc";
   sort_by?: SortTasksBy;
 }) {
-  const data = await getTasksFromDb({ page, limit, sort, sort_by });
+  const query = TaskModel.find()
+    .skip((page - 1) * limit)
+    .limit(limit);
+
+  if (sort_by && sort) {
+    query.sort({ [sort_by]: sort });
+  }
+
+  const data = await query.exec();
   return data;
 }
 
 export async function getTaskById(id: number) {
-  return await getTaskByIdFromDb(id);
+  return await TaskModel.findById(id);
 }
 
 export async function createTask(task: NewTask) {
-  return await createTaskFromDb(task);
+  return await TaskModel.create(task);
 }
 
 export async function updateTask(id: number, task: UpdateTask) {
-  return await updateTaskFromDb(id, task);
+  return await TaskModel.findByIdAndUpdate(id, task);
 }
 
 export async function deleteTask(id: number) {
-  return await deleteTaskFromDb(id);
+  return await TaskModel.findByIdAndDelete(id);
 }

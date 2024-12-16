@@ -1,12 +1,8 @@
 import {
-  createUserFromDb,
-  deleteUserFromDb,
-  getAllUsersFromDb,
-  getUserByIdFromDb,
   NewUser,
   SortUsersBy,
   UpdateUser,
-  updateUserFromDb,
+  UserModel,
 } from "../model/user.model";
 
 export async function getAllUsers({
@@ -20,22 +16,29 @@ export async function getAllUsers({
   sort?: "asc" | "desc";
   sort_by?: SortUsersBy;
 }) {
-  const data = await getAllUsersFromDb({ page, limit, sort, sort_by });
+  const query = UserModel.find()
+    .skip((page - 1) * limit)
+    .limit(limit);
+
+  if (sort_by && sort) {
+    query.sort({ [sort_by]: sort });
+  }
+  const data = await query.exec();
   return data;
 }
 
 export async function getUserById(id: number) {
-  return await getUserByIdFromDb(id);
+  return await UserModel.findById(id);
 }
 
 export async function createUser(user: NewUser) {
-  return await createUserFromDb(user);
+  return await UserModel.create(user);
 }
 
 export async function updateUser(id: number, user: UpdateUser) {
-  return await updateUserFromDb(id, user);
+  return await UserModel.findByIdAndUpdate(id, user);
 }
 
 export async function deleteUser(id: number) {
-  return await deleteUserFromDb(id);
+  return await UserModel.findByIdAndDelete(id);
 }

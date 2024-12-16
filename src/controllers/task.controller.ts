@@ -6,16 +6,13 @@ import {
   getTasks,
   updateTask,
 } from "../services/task.service";
-import { Task } from "../model/task.model";
+import { SortTasksBy } from "../model/task.model";
 
 async function handleGetTasks(req: Request, res: Response): Promise<void> {
   const page = parseInt((req.query.page as string | undefined) ?? "1");
   const limit = parseInt((req.query.limit as string | undefined) ?? "10");
   const sort = req.query.sort as "asc" | "desc";
-  const sort_by = req.query.sort_by as keyof Omit<
-    Task,
-    "message" | "completed"
-  >;
+  const sort_by = req.query.sort_by as SortTasksBy;
   const tasks = await getTasks({ page, limit, sort, sort_by });
   res.json(tasks);
 }

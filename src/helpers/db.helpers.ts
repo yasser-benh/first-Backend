@@ -1,5 +1,4 @@
 import fs from "fs";
-import { Task } from "../model/task.model";
 
 const DATABASE_PATH = "./database/db.json";
 

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { getQuerySchema } from "../helpers/getQuerySchema";
 
 export const UserCreatedSchema = z.object({
   body: z.object({
@@ -28,24 +29,5 @@ export const UserUpdateSchema = z.object({
 });
 
 export const userGetAllSchema = z.object({
-  query: z
-    .object({
-      page: z.string().optional(),
-      limit: z.string().optional(),
-      sort: z.enum(["asc", "desc"]).optional(),
-      sort_by: z.enum(["id"]).optional(),
-    })
-    .refine((data) => {
-      if (data.page) {
-        if (isNaN(parseInt(data.page))) {
-          return false;
-        }
-      }
-      if (data.limit) {
-        if (isNaN(parseInt(data.limit))) {
-          return false;
-        }
-      }
-      return true;
-    }),
+  query: getQuerySchema(["id", "name", "email"]),
 });

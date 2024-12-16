@@ -1,4 +1,5 @@
 import z from "zod";
+import { getQuerySchema } from "../helpers/getQuerySchema";
 
 export const TaskCreateSchema = z.object({
   body: z.object({
@@ -14,6 +15,8 @@ export const TaskCreateSchema = z.object({
       })
       .optional()
       .default(false),
+    created_by: z.string().min(1).max(255),
+    assigned_to: z.string().min(1).max(255).optional(),
   }),
 });
 
@@ -25,24 +28,11 @@ export const TaskUpdateSchema = z.object({
 });
 
 export const TaskGetAllSchema = z.object({
-  query: z
-    .object({
-      page: z.string().optional(),
-      limit: z.string().optional(),
-      sort: z.enum(["asc", "desc"]).optional(),
-      sort_by: z.enum(["id"]).optional(),
-    })
-    .refine((data) => {
-      if (data.page) {
-        if (isNaN(parseInt(data.page))) {
-          return false;
-        }
-      }
-      if (data.limit) {
-        if (isNaN(parseInt(data.limit))) {
-          return false;
-        }
-      }
-      return true;
-    }),
+  query: getQuerySchema([
+    "id",
+    "message",
+    "completed",
+    "created_by",
+    "assigned_to",
+  ]),
 });

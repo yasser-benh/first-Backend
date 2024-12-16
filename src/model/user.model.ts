@@ -1,11 +1,10 @@
-import { readDatabase, writeDatabase } from "../helpers/db.helpers";
-import { paginateData, sortData } from "../helpers/query.helpers";
+import mongoose from "mongoose";
 
-export type User = {
-  id: number;
+export interface User {
+  _id: mongoose.Schema.Types.ObjectId;
   name: string;
   email: string;
-};
+}
 
 export type NewUser = {
   name: string;
@@ -14,53 +13,62 @@ export type NewUser = {
 
 export type UpdateUser = Partial<NewUser>;
 
-export type SortUsersBy = "id";
+export type SortUsersBy = keyof User;
 
-export async function getAllUsersFromDb({
-  page,
-  limit,
-  sort,
-  sort_by,
-}: {
-  page: number;
-  limit: number;
-  sort?: "asc" | "desc";
-  sort_by?: SortUsersBy;
-}) {
-  let data = await readDatabase<User>("projects");
-  if (sort_by && sort) {
-    data = sortData(data, sort, sort_by);
-  }
-  return paginateData(data, page, limit);
-}
+export const UserModelName = "User";
 
-export async function getUserByIdFromDb(id: number) {
-  const data = await readDatabase<User>("projects");
-  const user = data.find((user) => {
-    return user.id === id;
-  });
-  return user;
-}
+const UserSchema = new mongoose.Schema<User>({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+});
 
-export async function createUserFromDb(new_user: NewUser) {
-  const users = await readDatabase<User>("projects");
-  const user = { ...new_user, id: new Date().getTime() };
-  await writeDatabase([...users, user], "projects");
-}
+export const UserModel = mongoose.model<User>(UserModelName, UserSchema);
 
-export async function updateUserFromDb(id: number, updated_user: UpdateUser) {
-  const users = await readDatabase<User>("projects");
-  const new_users = users.map((user) => {
-    if (user.id === id) {
-      return { ...user, ...updated_user };
-    }
-    return user;
-  });
-  await writeDatabase(new_users, "projects");
-}
+// export async function getAllUsersFromDb({
+//   page,
+//   limit,
+//   sort,
+//   sort_by,
+// }: {
+//   page: number;
+//   limit: number;
+//   sort?: "asc" | "desc";
+//   sort_by?: SortUsersBy;
+// }) {
+//   let data = await readDatabase<User>("projects");
+//   if (sort_by && sort) {
+//     data = sortData(data, sort, sort_by);
+//   }
+//   return paginateData(data, page, limit);
+// }
 
-export async function deleteUserFromDb(id: number): Promise<void> {
-  const users = await readDatabase<User>("projects");
-  const new_users = users.filter((user) => user.id !== id);
-  await writeDatabase(new_users, "projects");
-}
+// export async function getUserByIdFromDb(id: number) {
+//   const data = await readDatabase<User>("projects");
+//   const user = data.find((user) => {
+//     return user.id === id;
+//   });
+//   return user;
+// }
+
+// export async function createUserFromDb(new_user: NewUser) {
+//   const users = await readDatabase<User>("projects");
+//   const user = { ...new_user, id: new Date().getTime() };
+//   await writeDatabase([...users, user], "projects");
+// }
+
+// export async function updateUserFromDb(id: number, updated_user: UpdateUser) {
+//   const users = await readDatabase<User>("projects");
+//   const new_users = users.map((user) => {
+//     if (user.id === id) {
+//       return { ...user, ...updated_user };
+//     }
+//     return user;
+//   });
+//   await writeDatabase(new_users, "projects");
+// }
+
+// export async function deleteUserFromDb(id: number): Promise<void> {
+//   const users = await readDatabase<User>("projects");
+//   const new_users = users.filter((user) => user.id !== id);
+//   await writeDatabase(new_users, "projects");
+// }

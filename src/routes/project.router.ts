@@ -3,22 +3,21 @@ import {
   handleCreateProject,
   handleDeleteProject,
   handleGetProjects,
-  handleGetProjectsById,
+  handleGetProjectById,
   handleUpdateProject,
-} from "../controllers/project.conroller";
+} from "../controllers/project.controller";
 import validate from "../helpers/validate";
 import {
-    ProjectCreatedSchema,
-    ProjectGetAllSchema,
-    ProjectUpdateSchema,
+  ProjectCreatedSchema,
+  ProjectGetAllSchema,
+  ProjectUpdateSchema,
 } from "../schema/project.schema";
-
 
 const router = Router();
 
 router
   .get("/", [validate(ProjectGetAllSchema)], handleGetProjects)
-  .get("/:id", handleGetProjectsById)
+  .get("/:id", handleGetProjectById)
   .post("/", [validate(ProjectCreatedSchema)], handleCreateProject)
   .patch("/:id", [validate(ProjectUpdateSchema)], handleUpdateProject)
   .delete("/:id", handleDeleteProject);

@@ -10,11 +10,5 @@
   "users": [
     { "email": "admin@example.com", "name": "user", "id": 1734039990668 }
   ],
-  "projects":[
-    {
-      "id":1,
-      "name":"first"
-    }
-  ]
-  
+  "projects": [{ "id": 1, "name": "first" }]
 }
