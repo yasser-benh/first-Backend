@@ -28,18 +28,22 @@ export async function getTasks({
   return data;
 }
 
-export async function getTaskById(id: number) {
+export async function getTaskById(id: string) {
   return await TaskModel.findById(id);
 }
 
 export async function createTask(task: NewTask) {
-  return await TaskModel.create(task);
+  try {
+    return await TaskModel.create(task);
+  } catch (error) {
+    return null;
+  }
 }
 
-export async function updateTask(id: number, task: UpdateTask) {
+export async function updateTask(id: string, task: UpdateTask) {
   return await TaskModel.findByIdAndUpdate(id, task);
 }
 
-export async function deleteTask(id: number) {
+export async function deleteTask(id: string) {
   return await TaskModel.findByIdAndDelete(id);
 }

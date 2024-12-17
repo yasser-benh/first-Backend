@@ -27,7 +27,7 @@ export async function getAllUsers({
   return data;
 }
 
-export async function getUserById(id: number) {
+export async function getUserById(id: string) {
   return await UserModel.findById(id);
 }
 
@@ -35,10 +35,10 @@ export async function createUser(user: NewUser) {
   return await UserModel.create(user);
 }
 
-export async function updateUser(id: number, user: UpdateUser) {
+export async function updateUser(id: string, user: UpdateUser) {
   return await UserModel.findByIdAndUpdate(id, user);
 }
 
-export async function deleteUser(id: number) {
+export async function deleteUser(id: string) {
   return await UserModel.findByIdAndDelete(id);
 }

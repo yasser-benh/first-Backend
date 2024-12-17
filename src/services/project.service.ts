@@ -30,7 +30,7 @@ export async function getAllProjects({
   return data;
 }
 
-export async function getProjectById(id: number) {
+export async function getProjectById(id: string) {
   return await ProjectModel.findById(id);
 }
 
@@ -38,10 +38,10 @@ export async function createProject(Project: NewProject) {
   return await ProjectModel.create(Project);
 }
 
-export async function updateProject(id: number, Project: UpdateProject) {
+export async function updateProject(id: string, Project: UpdateProject) {
   return await ProjectModel.findByIdAndUpdate(id, Project);
 }
 
-export async function deleteProject(id: number) {
+export async function deleteProject(id: string) {
   return await ProjectModel.findByIdAndDelete(id);
 }

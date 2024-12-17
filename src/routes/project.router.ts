@@ -12,14 +12,19 @@ import {
   ProjectGetAllSchema,
   ProjectUpdateSchema,
 } from "../schema/project.schema";
+import { catchErrors } from "../helpers/catchErrors";
 
 const router = Router();
 
 router
-  .get("/", [validate(ProjectGetAllSchema)], handleGetProjects)
-  .get("/:id", handleGetProjectById)
-  .post("/", [validate(ProjectCreatedSchema)], handleCreateProject)
-  .patch("/:id", [validate(ProjectUpdateSchema)], handleUpdateProject)
-  .delete("/:id", handleDeleteProject);
+  .get("/", [validate(ProjectGetAllSchema)], catchErrors(handleGetProjects))
+  .get("/:id", catchErrors(handleGetProjectById))
+  .post("/", [validate(ProjectCreatedSchema)], catchErrors(handleCreateProject))
+  .patch(
+    "/:id",
+    [validate(ProjectUpdateSchema)],
+    catchErrors(handleUpdateProject)
+  )
+  .delete("/:id", catchErrors(handleDeleteProject));
 
 export default router;

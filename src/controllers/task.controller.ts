@@ -7,6 +7,7 @@ import {
   updateTask,
 } from "../services/task.service";
 import { SortTasksBy } from "../model/task.model";
+import { STATUS_CODES } from "../constants/STATUS_CODES";
 
 async function handleGetTasks(req: Request, res: Response): Promise<void> {
   const page = parseInt((req.query.page as string | undefined) ?? "1");
@@ -18,28 +19,44 @@ async function handleGetTasks(req: Request, res: Response): Promise<void> {
 }
 
 async function handleGetTaskById(req: Request, res: Response) {
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
   const task = await getTaskById(id);
+  if (task === null) {
+    res.status(STATUS_CODES.NOT_FOUND).json({ message: "Task not found" });
+    return;
+  }
   res.json(task);
 }
 
 async function handleCreateTask(req: Request, res: Response) {
-  const new_task = req.body;
-  await createTask(new_task);
-  res.json({ message: "Task created" });
+  const new_task_payload = req.body;
+  const new_task = await createTask(new_task_payload);
+  if (new_task === null) {
+    res.status(STATUS_CODES.BAD_REQUEST).json({ message: "Invalid payload" });
+    return;
+  }
+  res.status(STATUS_CODES.CREATED).json(new_task);
 }
 
 async function handleUpdateTask(req: Request, res: Response) {
-  const id = parseInt(req.params.id);
-  const updated_task = req.body;
-  await updateTask(id, updated_task);
-  res.json({ message: "Task updated" });
+  const id = req.params.id;
+  const updated_task_payload = req.body;
+  const updated_task = await updateTask(id, updated_task_payload);
+  if (updated_task === null) {
+    res.status(STATUS_CODES.NOT_FOUND).json({ message: "Task not found" });
+    return;
+  }
+  res.json(updated_task);
 }
 
 async function handleDeleteTask(req: Request, res: Response) {
-  const id = parseInt(req.params.id);
-  await deleteTask(id);
-  res.json({ message: "Task deleted" });
+  const id = req.params.id;
+  const deleted_task = await deleteTask(id);
+  if (deleted_task === null) {
+    res.status(STATUS_CODES.NOT_FOUND).json({ message: "Task not found" });
+    return;
+  }
+  res.json(deleted_task);
 }
 
 export {

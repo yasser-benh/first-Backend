@@ -2,8 +2,8 @@ import { Router } from "express";
 import {
   handleCreateUser,
   handleDeleteUser,
+  handleGetUserById,
   handleGetUsers,
-  handleGetUsersById,
   handleUpdateUser,
 } from "../controllers/user.controller";
 import validate from "../helpers/validate";
@@ -12,14 +12,15 @@ import {
   userGetAllSchema,
   UserUpdateSchema,
 } from "../schema/user.schema";
+import { catchErrors } from "../helpers/catchErrors";
 
 const router = Router();
 
 router
-  .get("/", [validate(userGetAllSchema)], handleGetUsers)
-  .get("/:id", handleGetUsersById)
-  .post("/", [validate(UserCreatedSchema)], handleCreateUser)
-  .patch("/:id", [validate(UserUpdateSchema)], handleUpdateUser)
-  .delete("/:id", handleDeleteUser);
+  .get("/", [validate(userGetAllSchema)], catchErrors(handleGetUsers))
+  .get("/:id", catchErrors(handleGetUserById))
+  .post("/", [validate(UserCreatedSchema)], catchErrors(handleCreateUser))
+  .patch("/:id", [validate(UserUpdateSchema)], catchErrors(handleUpdateUser))
+  .delete("/:id", catchErrors(handleDeleteUser));
 
 export default router;

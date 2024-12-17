@@ -12,14 +12,15 @@ import {
   TaskCreateSchema,
   TaskUpdateSchema,
 } from "../schema/task.schema";
+import { catchErrors } from "../helpers/catchErrors";
 
 const router = Router();
 
 router
-  .get("/", [validate(TaskGetAllSchema)], handleGetTasks)
-  .get("/:id", handleGetTaskById)
-  .post("/", [validate(TaskCreateSchema)], handleCreateTask)
-  .patch("/:id", [validate(TaskUpdateSchema)], handleUpdateTask)
-  .delete("/:id", handleDeleteTask);
+  .get("/", [validate(TaskGetAllSchema)], catchErrors(handleGetTasks))
+  .get("/:id", catchErrors(handleGetTaskById))
+  .post("/", [validate(TaskCreateSchema)], catchErrors(handleCreateTask))
+  .patch("/:id", [validate(TaskUpdateSchema)], catchErrors(handleUpdateTask))
+  .delete("/:id", catchErrors(handleDeleteTask));
 
 export default router;
