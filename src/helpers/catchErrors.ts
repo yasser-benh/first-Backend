@@ -4,6 +4,7 @@ import { STATUS_CODES } from "../constants/STATUS_CODES";
 export function catchErrors(callback: Function) {
   return async function (req: Request, res: Response) {
     try {
+      console.log("in");
       await callback(req, res);
     } catch (error) {
       console.error(error);

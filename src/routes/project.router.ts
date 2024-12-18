@@ -13,18 +13,35 @@ import {
   ProjectUpdateSchema,
 } from "../schema/project.schema";
 import { catchErrors } from "../helpers/catchErrors";
+import { RoleGuard } from "../guards/Role.guard";
 
 const router = Router();
 
 router
-  .get("/", [validate(ProjectGetAllSchema)], catchErrors(handleGetProjects))
-  .get("/:id", catchErrors(handleGetProjectById))
-  .post("/", [validate(ProjectCreatedSchema)], catchErrors(handleCreateProject))
+  .get(
+    "/",
+    [validate(ProjectGetAllSchema), RoleGuard("projects", "get")],
+    catchErrors(handleGetProjects)
+  )
+  .get(
+    "/:id",
+    [RoleGuard("projects", "get")],
+    catchErrors(handleGetProjectById)
+  )
+  .post(
+    "/",
+    [validate(ProjectCreatedSchema), RoleGuard("projects", "create")],
+    catchErrors(handleCreateProject)
+  )
   .patch(
     "/:id",
-    [validate(ProjectUpdateSchema)],
+    [validate(ProjectUpdateSchema), RoleGuard("projects", "update")],
     catchErrors(handleUpdateProject)
   )
-  .delete("/:id", catchErrors(handleDeleteProject));
+  .delete(
+    "/:id",
+    [RoleGuard("projects", "delete")],
+    catchErrors(handleDeleteProject)
+  );
 
 export default router;

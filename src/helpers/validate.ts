@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { AnyZodObject } from "zod";
+import { STATUS_CODES } from "../constants/STATUS_CODES";
 
 const validate =
   (schema: AnyZodObject) => (req: Request, res: any, next: NextFunction) => {
@@ -11,7 +12,7 @@ const validate =
       });
       next();
     } catch (e: any) {
-      return res.status(400).json(e.errors);
+      return res.status(STATUS_CODES.BAD_REQUEST).json(e.errors);
     }
   };
 
