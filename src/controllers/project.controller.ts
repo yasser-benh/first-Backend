@@ -8,11 +8,7 @@ import {
   updateProject,
 } from "../services/project.service";
 import { STATUS_CODES } from "../constants/STATUS_CODES";
-import { CustomRequest } from "../app";
-async function handleGetProjects(
-  req: CustomRequest,
-  res: Response
-): Promise<void> {
+async function handleGetProjects(req: Request, res: Response): Promise<void> {
   const page = parseInt((req.query.page as string | undefined) ?? "1");
   const limit = parseInt((req.query.limit as string | undefined) ?? "10");
   const sort = req.query.sort as "asc" | "desc";

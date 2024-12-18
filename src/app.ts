@@ -29,23 +29,21 @@ app.use((req, res, next) => {
     });
     next();
   });
+  next();
 });
 
 app.use((req: CustomRequest, res, next) => {
   req.user = {
     role: "admin",
   };
+  next();
 });
 
 app.listen(PORT, async () => {
   // connect to the database
   await connectDB();
   // Initialize the router
-  try {
-    AppRouter(app);
-  } catch (error) {
-    console.log(error);
-  }
+  AppRouter(app);
 
   console.log(`Server is running on http://localhost:${PORT}`);
 });
