@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "body-parser": "^1.20.3",
+    "config": "^3.3.12",
     "dotenv": "^16.4.7",
     "express": "^4.21.1",
     "mongoose": "^8.8.4",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.5",
+    "@types/config": "^3.3.5",
     "@types/express": "^5.0.0"
   }
 }

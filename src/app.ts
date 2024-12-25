@@ -1,8 +1,10 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request } from "express";
 import bodyParser from "body-parser";
 import AppRouter from "./app.router";
 import { connectDB } from "./database/connect-db";
 import dotenv from "dotenv";
+import config from "config";
+
 export interface CustomRequest extends Request {
   user?: {
     role: string;
@@ -10,9 +12,10 @@ export interface CustomRequest extends Request {
 }
 
 const app = express();
-const PORT = 3001;
 
 dotenv.config();
+
+const PORT = config.get("port");
 
 app.use(bodyParser.json());
 
