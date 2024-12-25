@@ -13,14 +13,31 @@ import {
   RoleUpdateSchema,
 } from "../schema/role.schema";
 import { catchErrors } from "../helpers/catchErrors";
+import { RoleGuard } from "../guards/Role.guard";
 
 const router = Router();
 
 router
-  .get("/", [validate(RoleGetAllSchema)], catchErrors(handleGetRoles))
-  .get("/:id", catchErrors(handleGetRoleById))
-  .post("/", [validate(RoleCreatedSchema)], catchErrors(handleCreateRole))
-  .patch("/:id", [validate(RoleUpdateSchema)], catchErrors(handleUpdateRole))
-  .delete("/:id", catchErrors(handleDeleteRole));
+  .get(
+    "/",
+    [validate(RoleGetAllSchema), RoleGuard("roles", "get")],
+    catchErrors(handleGetRoles)
+  )
+  .get("/:id", [RoleGuard("roles", "get")], catchErrors(handleGetRoleById))
+  .post(
+    "/",
+    [validate(RoleCreatedSchema), RoleGuard("roles", "create")],
+    catchErrors(handleCreateRole)
+  )
+  .patch(
+    "/:id",
+    [validate(RoleUpdateSchema), RoleGuard("roles", "update")],
+    catchErrors(handleUpdateRole)
+  )
+  .delete(
+    "/:id",
+    [RoleGuard("roles", "delete")],
+    catchErrors(handleDeleteRole)
+  );
 
 export default router;
