@@ -13,14 +13,31 @@ import {
   TaskUpdateSchema,
 } from "../schema/task.schema";
 import { catchErrors } from "../helpers/catchErrors";
+import { RoleGuard } from "../guards/Role.guard";
 
 const router = Router();
 
 router
-  .get("/", [validate(TaskGetAllSchema)], catchErrors(handleGetTasks))
-  .get("/:id", catchErrors(handleGetTaskById))
-  .post("/", [validate(TaskCreateSchema)], catchErrors(handleCreateTask))
-  .patch("/:id", [validate(TaskUpdateSchema)], catchErrors(handleUpdateTask))
-  .delete("/:id", catchErrors(handleDeleteTask));
+  .get(
+    "/",
+    [validate(TaskGetAllSchema), RoleGuard("tasks", "get")],
+    catchErrors(handleGetTasks)
+  )
+  .get("/:id", [RoleGuard("tasks", "get")], catchErrors(handleGetTaskById))
+  .post(
+    "/",
+    [validate(TaskCreateSchema), RoleGuard("tasks", "create")],
+    catchErrors(handleCreateTask)
+  )
+  .patch(
+    "/:id",
+    [validate(TaskUpdateSchema), RoleGuard("tasks", "update")],
+    catchErrors(handleUpdateTask)
+  )
+  .delete(
+    "/:id",
+    [RoleGuard("tasks", "delete")],
+    catchErrors(handleDeleteTask)
+  );
 
 export default router;
