@@ -7,6 +7,7 @@ export const UserCreatedSchema = z.object({
       message: "Invalid email format",
     }),
     name: z.string({ required_error: "Name is required" }).min(1).max(35),
+    password: z.string({ required_error: "Password is required" }).min(8),
   }),
 });
 
@@ -24,6 +25,10 @@ export const UserUpdateSchema = z.object({
       })
       .min(1)
       .max(35)
+      .optional(),
+    password: z
+      .string({ message: "Password must be a string" })
+      .min(8)
       .optional(),
   }),
 });

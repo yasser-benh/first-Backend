@@ -5,6 +5,7 @@ export type PermissionType = {
   projects: ("create" | "update" | "delete" | "get")[];
   users: ("create" | "update" | "delete" | "get")[];
   roles: ("create" | "update" | "delete" | "get")[];
+  sessions: ("get" | "update" | "delete")[];
 };
 
 export interface Role {

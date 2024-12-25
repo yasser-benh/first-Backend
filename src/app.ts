@@ -9,6 +9,8 @@ import config from "config";
 export interface CustomRequest extends Request {
   user?: {
     role: string;
+    id: string;
+    session_id: string;
   };
 }
 
@@ -37,6 +39,8 @@ app.use((req, res, next) => {
 app.use((req: CustomRequest, res, next) => {
   req.user = {
     role: "admin++",
+    id: "123",
+    session_id: "123",
   };
   next();
 });

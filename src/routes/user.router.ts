@@ -5,6 +5,8 @@ import {
   handleGetUserById,
   handleGetUsers,
   handleUpdateUser,
+  handleGetCurrentUser,
+  handleUpdateCurrentUser,
 } from "../controllers/user.controller";
 import validate from "../helpers/validate";
 import {
@@ -23,12 +25,14 @@ router
     [validate(userGetAllSchema), RoleGuard("users", "get")],
     catchErrors(handleGetUsers)
   )
+  .get("/me", catchErrors(handleGetCurrentUser))
   .get("/:id", [RoleGuard("users", "get")], catchErrors(handleGetUserById))
   .post(
     "/",
     [validate(UserCreatedSchema), RoleGuard("users", "create")],
     catchErrors(handleCreateUser)
   )
+  .patch("/me", catchErrors(handleUpdateCurrentUser))
   .patch(
     "/:id",
     [validate(UserUpdateSchema), RoleGuard("users", "update")],
