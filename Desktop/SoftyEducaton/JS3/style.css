@@ -1,0 +1,145 @@
+.calculator-container {
+    position: relative;
+    width: 90%;
+    max-width: 320px;
+    margin: 150px auto;
+}
+body{
+    transition: 1s;
+}
+.body_clas{
+    background-color: rgb(0, 0, 0);
+    transition: 1s;
+
+
+}
+
+.calculator {
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border: 2px solid transparent;
+    transition: 0.6s;
+}
+.calculator_dark{
+    background-color: #000000;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgb(151, 113, 6);
+    padding: 20px;
+    transition: 1s;
+    border: 2px solid rgb(151, 113, 6);
+}
+
+.watermark {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+#display {
+    width: calc(100% - 40px);
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 24px;
+    border: none;
+    border-radius: 5px;
+    text-align: right;
+}
+
+.buttons {
+    display: grid;
+    grid-gap: 10px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    justify-content: center;
+}
+
+button {
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.backspace {
+    order: 2;
+}
+
+button:hover {
+    background-color: #e6e6e6;
+}
+
+button:active {
+    transform: translateY(1px);
+}
+.switch{
+    border: 2px solid transparent;
+    border-radius: 70px;
+    display: flex;
+    justify-content: center;
+    width: 90px;
+    height: 30px;
+    margin: auto;
+    position: relative;
+    top:100px;
+    align-items: center;
+    box-shadow: 0px 0px 10px 1px black;
+    background-color: white;
+   
+
+}
+.dtl{
+    border: 2px solid transparent;
+    width: 30px;
+    height:26px;
+    border-radius: 50%;
+    background-color: rgb(0, 0, 0);
+    position: relative;
+    right: 27px;
+    transition: 1s;
+    z-index: 9;
+    box-shadow: 6px 0px 8px 1px rgb(104, 102, 102);
+    
+}
+.dtl_dark{
+    border: 2px solid transparent;
+    width: 30px;
+    height:26px;
+    border-radius: 50%;
+    background-color: rgb(255, 255, 255);
+    position: relative;
+    right: 27px;
+    transition: 1s;
+    transform: translateX(55px);
+    box-shadow: 0px 0px 8px 2px rgb(3, 3, 3);
+
+}
+.switch_dark{
+    border: 2px solid transparent;
+    border-radius: 70px;
+    display: flex;
+    justify-content: center;
+    width: 90px;
+    height: 30px;
+    margin: auto;
+    position: relative;
+    top:100px;
+    align-items: center;
+    box-shadow: 0px 0px 10px 1px rgb(255, 255, 255);
+    background-color: white;
+
+}
