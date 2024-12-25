@@ -11,7 +11,7 @@ export interface Role {
   _id: mongoose.Schema.Types.ObjectId;
   name: string;
   description?: string;
-  permissions: PermissionType;
+  permissions: Partial<PermissionType>;
 }
 
 export type NewRole = {

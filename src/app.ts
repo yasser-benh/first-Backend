@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import AppRouter from "./app.router";
 import { connectDB } from "./database/connect-db";
 import dotenv from "dotenv";
+dotenv.config();
 import config from "config";
 
 export interface CustomRequest extends Request {
@@ -13,9 +14,7 @@ export interface CustomRequest extends Request {
 
 const app = express();
 
-dotenv.config();
-
-const PORT = config.get("port");
+const PORT = config.get<number>("port");
 
 app.use(bodyParser.json());
 
@@ -37,7 +36,7 @@ app.use((req, res, next) => {
 
 app.use((req: CustomRequest, res, next) => {
   req.user = {
-    role: "admin",
+    role: "admin++",
   };
   next();
 });

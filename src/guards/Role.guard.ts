@@ -11,11 +11,9 @@ export const RoleGuard = (
   return async (req: CustomRequest, res: any, next: NextFunction) => {
     const { role } = req.user;
 
-    const role_entity = await getRoleByName(role);
+    const [{ permissions }] = await getRoleByName(role);
 
-    const has_access = role_entity[0].permissions[resource].includes(
-      permission as any
-    );
+    const has_access = permissions[resource]?.includes(permission as any);
 
     if (!has_access) {
       return res.status(STATUS_CODES.FORBIDDEN).json({
