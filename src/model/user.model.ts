@@ -12,7 +12,7 @@ export interface User {
 
 interface UserDocument extends User, mongoose.Document {
   _id: mongoose.Schema.Types.ObjectId;
-  comparePassword(candidatePassword: string): Promise<Boolean>;
+  comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 export type NewUser = {
@@ -51,4 +51,7 @@ UserSchema.methods.comparePassword = async function (
   return bcrypt.compare(candidatePassword, user.password).catch(() => false);
 };
 
-export const UserModel = mongoose.model<User>(UserModelName, UserSchema);
+export const UserModel = mongoose.model<UserDocument>(
+  UserModelName,
+  UserSchema
+);

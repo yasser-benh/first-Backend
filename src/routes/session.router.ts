@@ -6,6 +6,7 @@ import {
   handleGetSessionCurrentSession,
   handleGetSessions,
   handleSignUp,
+  handleUpdateCurrentSession,
   handleUpdateSession,
 } from "../controllers/session.controller";
 import validate from "../helpers/validate";
@@ -38,6 +39,11 @@ router
     catchErrors(handleCreateSession)
   )
   .post("/signup", [validate(SignUpSchema)], catchErrors(handleSignUp))
+  .patch(
+    "/me",
+    [validate(SessionUpdateSchema)],
+    catchErrors(handleUpdateCurrentSession)
+  )
   .patch(
     "/:id",
     [validate(SessionUpdateSchema), RoleGuard("sessions", "update")],

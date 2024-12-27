@@ -9,7 +9,9 @@ import {
 } from "../services/session.service";
 import { STATUS_CODES } from "../constants/STATUS_CODES";
 import { CustomRequest } from "../app";
-import { createUser } from "../services/user.service";
+import { createUser, validatePassword } from "../services/user.service";
+import { signJwt } from "../helpers/auth/signJWT";
+import config from "config";
 
 async function handleGetSessions(req: Request, res: Response): Promise<void> {
   const page = parseInt((req.query.page as string | undefined) ?? "1");
@@ -36,7 +38,48 @@ async function handleGetSessionCurrentSession(
 }
 
 async function handleCreateSession(req: CustomRequest, res: Response) {
-  // TODO: Implement
+  const { user, valid } = await validatePassword({
+    email: req.body.email,
+    password: req.body.password,
+  });
+  if (!valid) {
+    res
+      .status(STATUS_CODES.NOT_FOUND)
+      .json({ message: "Invalid email or password" });
+    return;
+  }
+
+  const new_Session = await createSession({
+    user_id: user._id,
+    valid: true,
+    user_agent: req.headers["user-agent"],
+  });
+
+  const token = signJwt(
+    {
+      id: user._id,
+      session_id: new_Session._id,
+      role: user.role,
+    },
+    "accessTokenPrivateKey",
+    {
+      expiresIn: config.get("accessTokenTtl"),
+    }
+  );
+
+  const refreshToken = signJwt(
+    {
+      id: user._id,
+      session_id: new_Session._id,
+      role: user.role,
+    },
+    "refreshTokenPrivateKey",
+    {
+      expiresIn: config.get("refreshTokenTtl"),
+    }
+  );
+
+  res.json({ token, refreshToken });
 }
 
 async function handleSignUp(req: CustomRequest, res: Response) {
@@ -58,13 +101,52 @@ async function handleSignUp(req: CustomRequest, res: Response) {
     res.status(STATUS_CODES.NOT_FOUND).json({ message: "Invalid payload" });
     return;
   }
-  res.status(STATUS_CODES.CREATED).json(new_Session);
+
+  const token = signJwt(
+    {
+      id: new_user._id,
+      session_id: new_Session._id,
+      role: new_user.role,
+    },
+    "accessTokenPrivateKey",
+    {
+      expiresIn: config.get("accessTokenTtl"),
+    }
+  );
+
+  const refreshToken = signJwt(
+    {
+      id: new_user._id,
+      session_id: new_Session._id,
+      role: new_user.role,
+    },
+    "refreshTokenPrivateKey",
+    {
+      expiresIn: config.get("refreshTokenTtl"),
+    }
+  );
+
+  res.status(STATUS_CODES.CREATED).json({ token, refreshToken });
 }
 
 async function handleUpdateSession(req: Request, res: Response) {
   const id = req.params.id;
   const updated_Session_payload = req.body;
   const updated_Session = await updateSession(id, updated_Session_payload);
+  if (updated_Session === null) {
+    res.status(STATUS_CODES.NOT_FOUND).json({ message: "Session not found" });
+    return;
+  }
+  res.json(updated_Session);
+}
+
+async function handleUpdateCurrentSession(req: CustomRequest, res: Response) {
+  const { session_id } = req.user;
+  const updated_Session_payload = req.body;
+  const updated_Session = await updateSession(
+    session_id,
+    updated_Session_payload
+  );
   if (updated_Session === null) {
     res.status(STATUS_CODES.NOT_FOUND).json({ message: "Session not found" });
     return;
@@ -86,4 +168,5 @@ export {
   handleGetSessions,
   handleGetSessionCurrentSession,
   handleSignUp,
+  handleUpdateCurrentSession,
 };

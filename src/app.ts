@@ -5,6 +5,7 @@ import { connectDB } from "./database/connect-db";
 import dotenv from "dotenv";
 dotenv.config();
 import config from "config";
+import { decodeToken } from "./helpers/auth/decodeToken";
 
 export interface CustomRequest extends Request {
   user?: {
@@ -36,14 +37,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use((req: CustomRequest, res, next) => {
-  req.user = {
-    role: "admin++",
-    id: "123",
-    session_id: "123",
-  };
-  next();
-});
+app.use(decodeToken);
 
 app.listen(PORT, async () => {
   // connect to the database

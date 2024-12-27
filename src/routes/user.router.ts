@@ -16,13 +16,14 @@ import {
 } from "../schema/user.schema";
 import { catchErrors } from "../helpers/catchErrors";
 import { RoleGuard } from "../guards/Role.guard";
+import { AuthGuard } from "../guards/Auth.guard";
 
 const router = Router();
 
 router
   .get(
     "/",
-    [validate(userGetAllSchema), RoleGuard("users", "get")],
+    [AuthGuard, RoleGuard("users", "get"), validate(userGetAllSchema)],
     catchErrors(handleGetUsers)
   )
   .get("/me", catchErrors(handleGetCurrentUser))
