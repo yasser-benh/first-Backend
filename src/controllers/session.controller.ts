@@ -54,7 +54,11 @@ async function handleCreateSession(req: CustomRequest, res: Response) {
     valid: true,
     user_agent: req.headers["user-agent"],
   });
-
+  console.log({
+    id: user._id,
+    session_id: new_Session._id,
+    role: user.role,
+  });
   const token = signJwt(
     {
       id: user._id,
@@ -90,12 +94,14 @@ async function handleSignUp(req: CustomRequest, res: Response) {
     email: new_Session_payload.email,
     password: new_Session_payload.password,
   });
+  console.log("🚀 ~ handleSignUp ~ new_user:", new_user);
 
   const new_Session = await createSession({
-    user_id: new_user.id,
+    user_id: new_user._id,
     valid: true,
     user_agent: req.headers["user-agent"],
   });
+  console.log("🚀 ~ handleSignUp ~ new_Session:", new_Session);
 
   if (new_Session === null) {
     res.status(STATUS_CODES.NOT_FOUND).json({ message: "Invalid payload" });

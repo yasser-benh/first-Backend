@@ -25,6 +25,9 @@ export async function decodeToken(
   const { decoded, expired } = verifyJWT(accessToken, "accessTokenPublicKey");
 
   if (decoded) {
+    const { session_id } = decoded as any;
+    // get user session from db
+    // check if its a valid session
     req.user = decoded as any;
     return next();
   }

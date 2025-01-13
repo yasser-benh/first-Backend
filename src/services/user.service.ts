@@ -37,7 +37,10 @@ export async function getUserByEmail(email: string) {
 }
 
 export async function createUser(user: NewUser) {
-  return await UserModel.create(user);
+  const { password, ...rest } = await UserModel.create(user).then((data) =>
+    data.toObject()
+  );
+  return rest;
 }
 
 export async function updateUser(id: string, user: UpdateUser) {

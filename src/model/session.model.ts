@@ -38,8 +38,8 @@ const SessionSchema = new mongoose.Schema<Session>(
     },
     valid: { type: Boolean, required: true },
     user_agent: { type: String, required: true },
-    created_at: { type: Date, required: true },
-    updated_at: { type: Date, required: true },
+    created_at: { type: Date, required: true, default: Date.now },
+    updated_at: { type: Date, required: true, default: Date.now },
   },
   { timestamps: true }
 );

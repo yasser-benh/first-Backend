@@ -21,18 +21,10 @@ import { AuthGuard } from "../guards/Auth.guard";
 const router = Router();
 
 router
-  .get(
-    "/",
-    [AuthGuard, RoleGuard("users", "get"), validate(userGetAllSchema)],
-    catchErrors(handleGetUsers)
-  )
+  .get("/", [validate(userGetAllSchema)], catchErrors(handleGetUsers))
   .get("/me", catchErrors(handleGetCurrentUser))
   .get("/:id", [RoleGuard("users", "get")], catchErrors(handleGetUserById))
-  .post(
-    "/",
-    [validate(UserCreatedSchema), RoleGuard("users", "create")],
-    catchErrors(handleCreateUser)
-  )
+  .post("/", [validate(UserCreatedSchema)], catchErrors(handleCreateUser))
   .patch("/me", catchErrors(handleUpdateCurrentUser))
   .patch(
     "/:id",

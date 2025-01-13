@@ -9,7 +9,13 @@ export const RoleGuard = (
   permission: PermissionType[typeof resource][0]
 ) => {
   return async (req: CustomRequest, res: any, next: NextFunction) => {
-    const { role } = req.user;
+    const user = req.user;
+    if (!user) {
+      return res.status(STATUS_CODES.FORBIDDEN).json({
+        message: "Forbidden",
+      });
+    }
+    const { role } = user;
 
     const [{ permissions }] = await getRoleByName(role);
 

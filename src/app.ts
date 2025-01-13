@@ -8,11 +8,11 @@ import config from "config";
 import { decodeToken } from "./helpers/auth/decodeToken";
 
 export interface CustomRequest extends Request {
-  user?: {
+  user: {
     role: string;
     id: string;
     session_id: string;
-  };
+  } | null;
 }
 
 const app = express();

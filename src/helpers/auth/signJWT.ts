@@ -6,10 +6,8 @@ export function signJwt(
   keyName: "accessTokenPrivateKey" | "refreshTokenPrivateKey",
   options?: jwt.SignOptions | undefined
 ) {
-  const signingKey = Buffer.from(
-    config.get<string>(keyName),
-    "base64"
-  ).toString("ascii");
+  const signingKey = config.get<string>(keyName);
+  console.log("🚀 ~ signingKey:");
   const JWT = jwt.sign(object, signingKey, {
     ...(options && options),
     algorithm: "RS256",

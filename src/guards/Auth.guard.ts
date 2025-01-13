@@ -4,7 +4,7 @@ import { STATUS_CODES } from "../constants/STATUS_CODES";
 
 export async function AuthGuard(
   req: CustomRequest,
-  res: Response,
+  res: any,
   next: NextFunction
 ) {
   const user = req.user;

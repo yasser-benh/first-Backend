@@ -18,41 +18,34 @@ import {
 import { catchErrors } from "../helpers/catchErrors";
 import { RoleGuard } from "../guards/Role.guard";
 import { SessionGetAllSchema } from "../schema/session.schema";
+import { AuthGuard } from "../guards/Auth.guard";
 
 const router = Router();
 
 router
   .get(
     "/",
-    [validate(SessionGetAllSchema), RoleGuard("sessions", "get")],
+    [validate(SessionGetAllSchema), AuthGuard],
     catchErrors(handleGetSessions)
   )
-  .get("/me", catchErrors(handleGetSessionCurrentSession))
-  .get(
-    "/:id",
-    [RoleGuard("sessions", "get")],
-    catchErrors(handleGetSessionById)
-  )
+  .get("/me", [AuthGuard], catchErrors(handleGetSessionCurrentSession))
+  .get("/:id", [AuthGuard], catchErrors(handleGetSessionById))
   .post(
     "/login",
-    [validate(SessionCreatedSchema), RoleGuard("sessions", "create")],
+    [validate(SessionCreatedSchema)],
     catchErrors(handleCreateSession)
   )
   .post("/signup", [validate(SignUpSchema)], catchErrors(handleSignUp))
   .patch(
     "/me",
-    [validate(SessionUpdateSchema)],
+    [validate(SessionUpdateSchema), AuthGuard],
     catchErrors(handleUpdateCurrentSession)
   )
   .patch(
     "/:id",
-    [validate(SessionUpdateSchema), RoleGuard("sessions", "update")],
+    [validate(SessionUpdateSchema), AuthGuard],
     catchErrors(handleUpdateSession)
   )
-  .delete(
-    "/:id",
-    [RoleGuard("sessions", "delete")],
-    catchErrors(handleDeleteSession)
-  );
+  .delete("/:id", [AuthGuard], catchErrors(handleDeleteSession));
 
 export default router;

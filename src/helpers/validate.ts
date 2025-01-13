@@ -5,6 +5,7 @@ import { STATUS_CODES } from "../constants/STATUS_CODES";
 const validate =
   (schema: AnyZodObject) => (req: Request, res: any, next: NextFunction) => {
     try {
+      console.log("Validating...");
       schema.parse({
         body: req.body,
         query: req.query,
