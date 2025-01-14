@@ -4,6 +4,8 @@ import { STATUS_CODES } from "../../constants/STATUS_CODES";
 import { verifyJWT } from "./verifyJwt";
 import { CustomRequest } from "../../app";
 import { reissueAccessToken } from "./reissueAccessToken";
+import { SessionModel } from "../../model/session.model";
+import { UserModel } from "../../model/user.model";
 
 export async function decodeToken(
   req: CustomRequest,
@@ -25,9 +27,18 @@ export async function decodeToken(
   const { decoded, expired } = verifyJWT(accessToken, "accessTokenPublicKey");
 
   if (decoded) {
-    const { session_id } = decoded as any;
-    // get user session from db
-    // check if its a valid session
+    const { session_id, id } = decoded as any;
+
+    const [session, user] = await Promise.all([
+      SessionModel.findById(session_id),
+      UserModel.findById(id),
+    ]);
+
+    if (!session || !user || !session.valid) {
+      req.user = null;
+      next();
+    }
+
     req.user = decoded as any;
     return next();
   }

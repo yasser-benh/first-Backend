@@ -4,6 +4,7 @@ import config from "config";
 
 export interface User {
   _id: mongoose.Schema.Types.ObjectId;
+  avatar: string;
   name: string;
   role: string;
   email: string;
@@ -16,6 +17,8 @@ interface UserDocument extends User, mongoose.Document {
 }
 
 export type NewUser = {
+  avatar: string;
+  role: string;
   name: string;
   email: string;
   password: string;
@@ -28,8 +31,16 @@ export type SortUsersBy = keyof User;
 export const UserModelName = "User";
 
 const UserSchema = new mongoose.Schema<User>({
+  avatar: {
+    type: String,
+    default: "",
+  },
+  role: {
+    type: String,
+    required: true,
+  },
   name: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
 });
 
