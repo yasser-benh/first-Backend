@@ -1,5 +1,6 @@
 export default {
   port: 3002,
+  ws_port: 8080,
   connection_string:
     "mongodb+srv://mabroukr999:oD8ntZLi25mWzjEi@cluster0.9tirg.mongodb.net/",
   saltWorkFactor: 10,

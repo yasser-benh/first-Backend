@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import config from "config";
 import { decodeToken } from "./helpers/auth/decodeToken";
-
+import "./gateways/messages.gateway";
 export interface CustomRequest extends Request {
   user: {
     role: string;
@@ -18,6 +18,7 @@ export interface CustomRequest extends Request {
 const app = express();
 
 const PORT = config.get<number>("port");
+const WS_PORT = config.get<number>("ws_port");
 
 app.use(bodyParser.json());
 

@@ -16,6 +16,7 @@ async function handleGetUsers(req: Request, res: Response): Promise<void> {
   const sort = req.query.sort as "asc" | "desc";
   const sort_by = req.query.sort_by as SortUsersBy;
   const users = await getAllUsers({ page, limit, sort, sort_by });
+
   res.json(users);
 }
 
